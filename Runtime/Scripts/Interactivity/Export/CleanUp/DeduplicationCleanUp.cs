@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityGLTF.Interactivity.Schema;
+using UnityEngine; // RuntimeInitializeOnLoadMethod
 
 namespace UnityGLTF.Interactivity.Export
 {
@@ -14,17 +15,17 @@ namespace UnityGLTF.Interactivity.Export
         {
           CleanUpRegistry.RegisterCleanUp(new DeduplicationCleanUp());
         }
-        
+
         public void OnCleanUp(CleanUpTask task)
         {
             var nodes = task.context.Nodes.ToArray();
             var removed = new HashSet<GltfInteractivityNode>();
-            
+
             foreach (var n in nodes)
             {
                 if (removed.Contains(n))
                     continue;
-                
+
                 if (n.ValueInConnection.Count == 0)
                     continue;
                 if (n.FlowConnections.Count > 0)
@@ -41,13 +42,13 @@ namespace UnityGLTF.Interactivity.Export
 
                     if (n2 == n)
                         continue;
-                    
+
                     if (n.Schema.Op != n2.Schema.Op)
                         continue;
-                    
+
                     if (n.ValueInConnection.Count != n2.ValueInConnection.Count)
                         continue;
-                    
+
                     if (n.OutputValueSocket.Count != n2.OutputValueSocket.Count)
                         continue;
 
@@ -78,7 +79,7 @@ namespace UnityGLTF.Interactivity.Export
                             {
                                 if (socket.Value.Node == n2.Index)
                                     socket.Value.Node = n.Index;
-                                
+
                             }
                         }
 
@@ -87,9 +88,9 @@ namespace UnityGLTF.Interactivity.Export
                     }
                 }
             }
-            
-            
-            
+
+
+
         }
     }
 }
